@@ -102,6 +102,10 @@ RUN apt update && \
 # Set environment variables for DASICS
 ENV RISCV=/opt/riscv
 ENV PATH=$RISCV/bin:$PATH
+ENV DASICS_TOP=/workspace/dasics
+ENV RISCV_ROOTFS_HOME=$DASICS_TOP/riscv-rootfs
+ENV NEMU_HOME=$DASICS_TOP/NEMU
+ENV NOOP_HOME=$DASICS_TOP/xiangshan-dasics
 
 CMD [ "/bin/bash" ]
 
