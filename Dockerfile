@@ -93,7 +93,9 @@ RUN apt update && \
         libelf-dev \
         libtool \
         bc \
-        device-tree-compiler && \
+        device-tree-compiler \
+        curl \
+        libsdl2-dev && \
     apt clean && \
     ln -sf /usr/bin/python3 /usr/bin/python
 
