@@ -9,6 +9,7 @@ LABEL maintainer="xuyibin21b@ict.ac.cn"
 
 WORKDIR /workspace
 
+# For Chinese users, change the default apt source to THU mirrors
 RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse" > /etc/apt/sources.list && \
     echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
     echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
@@ -63,11 +64,13 @@ WORKDIR /workspace
 
 COPY --from=builder /workspace/riscv /opt/riscv
 
+# For Chinese users, change the default apt source to THU mirrors
 RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse" > /etc/apt/sources.list && \
     echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
     echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
     echo "deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse" >> /etc/apt/sources.list
 
+# Install packages for DASICS repositories
 RUN apt update && \
     apt install -y gcc \
         g++ \
@@ -94,6 +97,7 @@ RUN apt update && \
     apt clean && \
     ln -sf /usr/bin/python3 /usr/bin/python
 
+# Set environment variables for DASICS
 ENV RISCV=/opt/riscv
 ENV PATH=$RISCV/bin:$PATH
 
