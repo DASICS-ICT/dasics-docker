@@ -52,7 +52,7 @@ RUN git clone -b toolchain-bkp https://github.com/OpenXiangShan/riscv-gnu-toolch
 
 ############################################################
 #
-# Second stage: Clone DASICS repositories
+# Second stage: Set up DASICS environment
 #
 ############################################################
 
@@ -94,29 +94,8 @@ RUN apt update && \
     apt clean && \
     ln -sf /usr/bin/python3 /usr/bin/python
 
-# Clone QEMU-DASICS, riscv-pk, riscv-linux, riscv-rootfs
-RUN git clone -b xs-dasics-qemu-8.1.0 https://github.com/DASICS-ICT/QEMU-DASICS.git && \
-        cd QEMU-DASICS && \
-        git reset --hard 7a1a44528d112e308a200ce49fc4c1fb51b4085e && \
-        cd .. && \
-    git clone -b dasics-qemu-8.1.0 https://github.com/DASICS-ICT/riscv-pk.git && \
-        cd riscv-pk && \
-        git reset --hard 05f77eb9a4f6406425f2ad21ba0c1047faf991b4 && \
-        cd ..  && \
-    git clone -b linux-5.10.167 https://github.com/DASICS-ICT/riscv-linux.git && \
-        cd riscv-linux && \
-        git reset --hard 8e4d97a0d93fe0aba7dbf76f0e4f817d49d6e24d && \
-        cd .. && \
-    git clone -b xs-dasics-linux https://github.com/DASICS-ICT/riscv-rootfs.git && \
-        cd riscv-rootfs && \
-        git reset --hard bb403c07c525f76df4218062d0e94680ebf4bbd0 && \
-        cd ..
-
-ENV WORKSPACE=/workspace
 ENV RISCV=/opt/riscv
 ENV PATH=$RISCV/bin:$PATH
-# ENV NEMU_HOME=$WORKSPACE/NEMU
-ENV RISCV_ROOTFS_HOME=$WORKSPACE/riscv-rootfs
 
 CMD [ "/bin/bash" ]
 
