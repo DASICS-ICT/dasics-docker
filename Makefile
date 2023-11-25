@@ -1,27 +1,42 @@
-IMG_NAME = dasics-docker
-IMG_TAG  = 1.0.0
+######################################################
+# Makefile for DASICS Docker Image
+######################################################
 
-DIR_TOP  = $(shell pwd)
+# Docker Image Variables
+IMG_NAME    := dasics-docker
+IMG_VERSION := 1.0.0
+IMG_TAG     := $(IMG_NAME):$(IMG_VERSION)
 
-SRC_DOCKERFILE = $(DIR_TOP)/Dockerfile
+# Host Machine Variables
+DIR_TOP        := $(shell pwd)
+SRC_DOCKERFILE := $(DIR_TOP)/Dockerfile
+HOST_DASICS    ?=
 
-HOST_PORT   ?= 5678
-HOST_DASICS ?=
+# Docker Variables
+DOCKER           := sudo docker
+DOCKER_VOLUME    := $(if $(HOST_DASICS), -v $(HOST_DASICS):/workspace/dasics, )
+DOCKER_BUILD_NET := --network host \
+	--build-arg http_proxy=$(http_proxy)     --build-arg HTTP_PROXY=$(HTTP_PROXY)     \
+	--build-arg https_proxy=$(https_proxy)   --build-arg HTTPS_PROXY=$(HTTPS_PROXY)   \
+	--build-arg socks5_proxy=$(socks5_proxy) --build-arg SOCKS5_PROXY=$(SOCKS5_PROXY)
+DOCKER_RUN_NET   := --network=host \
+	-e http_proxy=$(http_proxy)     -e HTTP_PROXY=$(HTTP_PROXY)     \
+	-e https_proxy=$(https_proxy)   -e HTTPS_PROXY=$(HTTPS_PROXY)   \
+	-e socks5_proxy=$(socks5_proxy) -e SOCKS5_PROXY=$(SOCKS5_PROXY)
+
+######################################################
+# Makefile Rules
+######################################################
 
 .PHONY: all image run
 
+# Default target
 all: image
 
+# Build Docker Image
 image: $(SRC_DOCKERFILE)
-	sudo docker build --network host --tag $(IMG_NAME):$(IMG_TAG)							\
-		--build-arg http_proxy=$(http_proxy)     --build-arg HTTP_PROXY=$(HTTP_PROXY)		\
-		--build-arg https_proxy=$(https_proxy)   --build-arg HTTPS_PROXY=$(HTTPS_PROXY)		\
-		--build-arg socks5_proxy=$(socks5_proxy) --build-arg SOCKS5_PROXY=$(SOCKS5_PROXY) .
+	$(DOCKER) build $(DOCKER_BUILD_NET) --tag $(IMG_TAG) .
 
+# Run Docker Container
 run:
-ifdef HOST_DASICS
-	sudo docker run -it -p $(HOST_PORT):8000 -v $(HOST_DASICS):/workspace/dasics $(IMG_NAME):$(IMG_TAG)
-else
-	@echo "WARNING: HOST_DASICS is not defined, thus not map user's directory to the container!"
-	sudo docker run -it -p $(HOST_PORT):8000 $(IMG_NAME):$(IMG_TAG)
-endif
+	-$(DOCKER) run -it $(DOCKER_RUN_NET) $(DOCKER_VOLUME) $(IMG_TAG)
