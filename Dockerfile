@@ -95,9 +95,28 @@ RUN apt update && \
         bc \
         device-tree-compiler \
         curl \
-        libsdl2-dev && \
+        libsdl2-dev \
+        openjdk-11-jre \
+        clang \
+        time \
+        libreadline-dev && \
     apt clean && \
     ln -sf /usr/bin/python3 /usr/bin/python
+
+# Install mill
+RUN sh -c "curl -L https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M4/0.10.0-M4 > /usr/local/bin/mill && chmod +x /usr/local/bin/mill" && \
+    mill --version
+
+# Install verilator
+RUN git clone -b v4.218 https://github.com/verilator/verilator.git && \
+    cd verilator && \
+    autoupdate && \
+    autoconf && \
+    ./configure CC=clang CXX=clang++ && \
+    make -j`nproc` && \
+    make install && \
+    cd .. && \
+    rm -rf ./verilator
 
 # Set environment variables for DASICS
 ENV RISCV=/opt/riscv
