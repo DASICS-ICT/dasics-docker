@@ -23,9 +23,8 @@ This command will build the Docker image using the specified Dockerfile and tag 
 To run the Docker container, use the following command:
 
 ```bash
-make run [HOST_DASICS=<path/to/host/dasics>] [HOST_PORT=<host_port>]
+make run [HOST_DASICS=<path/to/host/dasics>]
 ```
 
 - `HOST_DASICS`: Specify the host directory to be mounted inside the Docker container. If not provided, the user's directory will not be mapped to the container.
-
-- `HOST_PORT`: Specify the host port to map to the container's port 8000. If not provided, the default port 5678 will be used.
+- If a proxy is necessary during the container's runtime, ensure that your local machine has the proxy configured before executing the command.
