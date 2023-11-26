@@ -19,7 +19,7 @@ DOCKER_BUILD_NET := --network host \
 	--build-arg http_proxy=$(http_proxy)     --build-arg HTTP_PROXY=$(HTTP_PROXY)     \
 	--build-arg https_proxy=$(https_proxy)   --build-arg HTTPS_PROXY=$(HTTPS_PROXY)   \
 	--build-arg socks5_proxy=$(socks5_proxy) --build-arg SOCKS5_PROXY=$(SOCKS5_PROXY)
-DOCKER_RUN_NET   := --network=host \
+DOCKER_RUN_NET   := --network host --hostname docker \
 	-e http_proxy=$(http_proxy)     -e HTTP_PROXY=$(HTTP_PROXY)     \
 	-e https_proxy=$(https_proxy)   -e HTTPS_PROXY=$(HTTPS_PROXY)   \
 	-e socks5_proxy=$(socks5_proxy) -e SOCKS5_PROXY=$(SOCKS5_PROXY)
