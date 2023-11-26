@@ -103,7 +103,9 @@ RUN apt update && \
         sqlite3 \
         libsqlite3-dev \
         zlib1g-dev \
-        autoconf2.69 && \
+        autoconf2.69 \
+        gosu \
+        sudo && \
     apt clean && \
     ln -sf /usr/bin/python3 /usr/bin/python
 
@@ -121,9 +123,6 @@ RUN git clone -b v4.218 https://github.com/verilator/verilator.git && \
     cd .. && \
     rm -rf ./verilator
 
-# Set all directories as git's safe directory
-RUN git config --global --add safe.directory "*"
-
 # Set environment variables for DASICS
 ENV RISCV=/opt/riscv
 ENV PATH=$RISCV/bin:$PATH
@@ -132,6 +131,10 @@ ENV RISCV_ROOTFS_HOME=$DASICS_TOP/riscv-rootfs
 ENV NEMU_HOME=$DASICS_TOP/NEMU
 ENV NOOP_HOME=$DASICS_TOP/xiangshan-dasics
 
-CMD [ "/bin/bash" ]
+# Set the entrypoint script for creating new user with the same uid as host user
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod a+x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh", "/bin/bash"]
 
 EXPOSE 8000

@@ -23,6 +23,7 @@ DOCKER_RUN_NET   := --network=host \
 	-e http_proxy=$(http_proxy)     -e HTTP_PROXY=$(HTTP_PROXY)     \
 	-e https_proxy=$(https_proxy)   -e HTTPS_PROXY=$(HTTPS_PROXY)   \
 	-e socks5_proxy=$(socks5_proxy) -e SOCKS5_PROXY=$(SOCKS5_PROXY)
+DOCKER_RUN_USER  := -e HOST_UID=$(shell id -u $$USER)
 
 ######################################################
 # Makefile Rules
@@ -39,4 +40,4 @@ image: $(SRC_DOCKERFILE)
 
 # Run Docker Container
 run:
-	-$(DOCKER) run -it $(DOCKER_RUN_NET) $(DOCKER_VOLUME) $(IMG_TAG)
+	-$(DOCKER) run -it $(DOCKER_RUN_NET) $(DOCKER_RUN_USER) $(DOCKER_VOLUME) $(IMG_TAG)
