@@ -104,7 +104,7 @@ RUN apt update && \
     ln -sf /usr/bin/python3 /usr/bin/python
 
 # Install mill
-RUN sh -c "curl -L https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M4/0.10.0-M4 > /usr/local/bin/mill && chmod +x /usr/local/bin/mill" && \
+RUN sh -c "curl -L https://github.com/com-lihaoyi/mill/releases/download/0.9.8/0.9.8 > /usr/local/bin/mill && chmod +x /usr/local/bin/mill" && \
     mill --version
 
 # Install verilator
