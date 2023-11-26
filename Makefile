@@ -14,7 +14,7 @@ HOST_DASICS    ?=
 
 # Docker Variables
 DOCKER           := docker
-DOCKER_VOLUME    := $(if $(HOST_DASICS), -v $(HOST_DASICS):/workspace/dasics, )
+DOCKER_VOLUME    := $(if $(HOST_DASICS), -v $(HOST_DASICS):$(HOST_DASICS), )
 DOCKER_BUILD_NET := --network host \
 	--build-arg http_proxy=$(http_proxy)     --build-arg HTTP_PROXY=$(HTTP_PROXY)     \
 	--build-arg https_proxy=$(https_proxy)   --build-arg HTTPS_PROXY=$(HTTPS_PROXY)   \
@@ -24,6 +24,10 @@ DOCKER_RUN_NET   := --network=host \
 	-e https_proxy=$(https_proxy)   -e HTTPS_PROXY=$(HTTPS_PROXY)   \
 	-e socks5_proxy=$(socks5_proxy) -e SOCKS5_PROXY=$(SOCKS5_PROXY)
 DOCKER_RUN_USER  := -e HOST_UID=$(shell id -u $$USER)
+DOCKER_RUN_DASICS:= $(if $(HOST_DASICS), -w $(HOST_DASICS) \
+	-e NOOP_HOME=$(HOST_DASICS)/xiangshan-dasics \
+	-e NEMU_HOME=$(HOST_DASICS)/NEMU \
+	-e RISCV_ROOTFS_HOME=$(HOST_DASICS)/riscv-rootfs, )
 
 ######################################################
 # Makefile Rules
@@ -40,4 +44,4 @@ image: $(SRC_DOCKERFILE)
 
 # Run Docker Container
 run:
-	-$(DOCKER) run -it $(DOCKER_RUN_NET) $(DOCKER_RUN_USER) $(DOCKER_VOLUME) $(IMG_TAG)
+	-$(DOCKER) run -it $(DOCKER_RUN_NET) $(DOCKER_RUN_USER) $(DOCKER_VOLUME) $(DOCKER_RUN_DASICS) $(IMG_TAG)

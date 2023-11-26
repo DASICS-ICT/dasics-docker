@@ -123,13 +123,9 @@ RUN git clone -b v4.218 https://github.com/verilator/verilator.git && \
     cd .. && \
     rm -rf ./verilator
 
-# Set environment variables for DASICS
+# Add toolchain to $PATH
 ENV RISCV=/opt/riscv
 ENV PATH=$RISCV/bin:$PATH
-ENV DASICS_TOP=/workspace/dasics
-ENV RISCV_ROOTFS_HOME=$DASICS_TOP/riscv-rootfs
-ENV NEMU_HOME=$DASICS_TOP/NEMU
-ENV NOOP_HOME=$DASICS_TOP/xiangshan-dasics
 
 # Set the entrypoint script for creating new user with the same uid as host user
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
