@@ -99,7 +99,11 @@ RUN apt update && \
         openjdk-11-jre \
         clang \
         time \
-        libreadline-dev && \
+        libreadline6-dev \
+        sqlite3 \
+        libsqlite3-dev \
+        zlib1g-dev \
+        autoconf2.69 && \
     apt clean && \
     ln -sf /usr/bin/python3 /usr/bin/python
 
@@ -110,13 +114,15 @@ RUN sh -c "curl -L https://github.com/com-lihaoyi/mill/releases/download/0.9.8/0
 # Install verilator
 RUN git clone -b v4.218 https://github.com/verilator/verilator.git && \
     cd verilator && \
-    autoupdate && \
-    autoconf && \
+    autoconf2.69 && \
     ./configure CC=clang CXX=clang++ && \
     make -j`nproc` && \
     make install && \
     cd .. && \
     rm -rf ./verilator
+
+# Set all directories as git's safe directory
+RUN git config --global --add safe.directory "*"
 
 # Set environment variables for DASICS
 ENV RISCV=/opt/riscv
