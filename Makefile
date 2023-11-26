@@ -13,7 +13,7 @@ SRC_DOCKERFILE := $(DIR_TOP)/Dockerfile
 HOST_DASICS    ?=
 
 # Docker Variables
-DOCKER           := sudo docker
+DOCKER           := docker
 DOCKER_VOLUME    := $(if $(HOST_DASICS), -v $(HOST_DASICS):/workspace/dasics, )
 DOCKER_BUILD_NET := --network host \
 	--build-arg http_proxy=$(http_proxy)     --build-arg HTTP_PROXY=$(HTTP_PROXY)     \
