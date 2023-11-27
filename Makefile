@@ -3,8 +3,8 @@
 ######################################################
 
 # Docker Image Variables
-IMG_NAME    := dasics-docker
-IMG_VERSION := 1.1.0
+IMG_NAME    := dasics
+IMG_VERSION := dev-1.1.0
 IMG_TAG     := $(IMG_NAME):$(IMG_VERSION)
 
 # Host Machine Variables
