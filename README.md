@@ -4,7 +4,7 @@ This repository provides a Docker-based development environment for DASICS (Dyna
 
 ## Prerequisites
 
-Before using this Docker environment, ensure that you have Docker installed on your system.
+Before using this Docker environment, ensure that you have Docker installed on your system, and you have been added to docker group.
 
 ## Building the Docker Image
 
