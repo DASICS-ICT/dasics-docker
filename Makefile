@@ -45,5 +45,5 @@ image: $(SRC_DOCKERFILE)
 
 # Run Docker Container
 run:
-	-$(DOCKER) run -it $(DOCKER_RUN_NET) $(DOCKER_RUN_USER) $(DOCKER_RUN_NAME) \
+	-$(DOCKER) run --rm -it $(DOCKER_RUN_NET) $(DOCKER_RUN_USER) $(DOCKER_RUN_NAME) \
 		$(DOCKER_VOLUME) $(DOCKER_RUN_DASICS) $(IMG_TAG)
