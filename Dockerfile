@@ -133,7 +133,11 @@ RUN apt install -y ninja-build \
 RUN DEBIAN_FRONTEND=noninteractive apt install -y tzdata \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-# Install zsh
+# Create fake user, whose UID and GID will later be reset to host
+RUN useradd -s /bin/zsh -m user && \
+    echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+# Install zsh for root and user
 RUN apt install -y zsh && \
     apt clean && \
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
@@ -141,7 +145,12 @@ RUN apt install -y zsh && \
     sed -i "s/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=\"af-magic\"/" ~/.zshrc && \
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions && \
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && \
-    sed -i "s/plugins=(git)/plugins=(git sudo z extract zsh-autosuggestions zsh-syntax-highlighting)/" ~/.zshrc
+    sed -i "s/plugins=(git)/plugins=(git sudo z extract zsh-autosuggestions zsh-syntax-highlighting)/" ~/.zshrc && \
+    chsh -s /bin/zsh user && \
+    cp -r ~/.oh-my-zsh /home/user/.oh-my-zsh && \
+    chown -R user:user /home/user/.oh-my-zsh && \
+    cp ~/.zshrc /home/user/.zshrc && \
+    chown -R user:user /home/user/.zshrc
 
 # Install another additional auxiliary packages
 RUN apt install -y openssh-server \

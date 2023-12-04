@@ -23,7 +23,7 @@ DOCKER_RUN_NET   := --network host --hostname docker \
 	-e http_proxy=$(http_proxy)     -e HTTP_PROXY=$(HTTP_PROXY)     \
 	-e https_proxy=$(https_proxy)   -e HTTPS_PROXY=$(HTTPS_PROXY)   \
 	-e socks5_proxy=$(socks5_proxy) -e SOCKS5_PROXY=$(SOCKS5_PROXY)
-DOCKER_RUN_USER  := -e HOST_UID=$(shell id -u $$USER)
+DOCKER_RUN_USER  := -e HOST_UID=$(shell id -u $$USER) -e HOST_GID=$(shell id -g $$USER)
 DOCKER_RUN_NAME  := --name dasics-$(USER)
 DOCKER_RUN_DASICS:= $(if $(HOST_DASICS), -w $(HOST_DASICS) \
 	-e NOOP_HOME=$(HOST_DASICS)/xiangshan-dasics \
