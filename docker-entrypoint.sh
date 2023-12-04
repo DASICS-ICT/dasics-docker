@@ -13,4 +13,4 @@ chown -R $HOST_UID /workspace
 echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Execute the specified command as the new user using gosu
-exec /usr/sbin/gosu user "$@"
+exec gosu user "$@"
