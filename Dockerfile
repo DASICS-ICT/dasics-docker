@@ -129,6 +129,10 @@ RUN apt install -y ninja-build \
         zlib1g-dev && \
     apt clean
 
+# Adjust timezone
+RUN DEBIAN_FRONTEND=noninteractive apt install -y tzdata \
+    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
 # Install additional auxiliary packages
 RUN apt install -y openssh-server \
         vim \
