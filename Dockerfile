@@ -133,7 +133,17 @@ RUN apt install -y ninja-build \
 RUN DEBIAN_FRONTEND=noninteractive apt install -y tzdata \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-# Install additional auxiliary packages
+# Install zsh
+RUN apt install -y zsh && \
+    apt clean && \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
+    chsh -s /bin/zsh && \
+    sed -i "s/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=\"af-magic\"/" ~/.zshrc && \
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions && \
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && \
+    sed -i "s/plugins=(git)/plugins=(git sudo z extract zsh-autosuggestions zsh-syntax-highlighting)/" ~/.zshrc
+
+# Install another additional auxiliary packages
 RUN apt install -y openssh-server \
         vim \
         tmux \
@@ -148,6 +158,6 @@ ENV PATH=$RISCV/bin:$PATH
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod a+x /usr/local/bin/docker-entrypoint.sh
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh", "/bin/bash"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh", "/bin/zsh"]
 
 EXPOSE 8000
