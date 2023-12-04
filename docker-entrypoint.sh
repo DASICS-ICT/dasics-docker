@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Add a new user with the same host UID
-useradd -u $HOST_UID -s /bin/bash -o user
+useradd -u $HOST_UID -s /bin/bash -o -m user
 
 # Add the new user to the root group
 usermod -aG root user
