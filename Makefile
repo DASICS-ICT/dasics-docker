@@ -4,7 +4,7 @@
 
 # Docker Image Variables
 IMG_NAME    := dasics
-IMG_VERSION := opencs-1.1.0
+IMG_VERSION := opencs-1.2.0
 IMG_TAG     := $(IMG_NAME):$(IMG_VERSION)
 
 # Host Machine Variables
