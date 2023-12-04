@@ -70,48 +70,28 @@ RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted 
     echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
     echo "deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse" >> /etc/apt/sources.list
 
-# Install packages for DASICS repositories
+# Install packages for verilator, mill and docker-entrypoint.sh
 RUN apt update && \
     apt install -y gcc \
         g++ \
         make \
         git \
+        gosu \
+        sudo \
+        help2man \
+        perl \
+        perl-doc \
         python3 \
         pip \
-        openssh-server \
-        ninja-build \
-        libpixman-1-dev \
-        libglib2.0-dev \
-        libncurses5-dev \
-        openssl \
-        libssl-dev \
-        build-essential \
-        pkg-config \
-        libc6-dev \
+        clang \
+        curl \
+        autoconf2.69 \
         bison \
         flex \
-        libelf-dev \
-        libtool \
-        bc \
-        device-tree-compiler \
-        curl \
-        libsdl2-dev \
-        openjdk-11-jre \
-        clang \
-        time \
-        libreadline6-dev \
-        sqlite3 \
-        libsqlite3-dev \
-        zlib1g-dev \
-        autoconf2.69 \
-        gosu \
-        sudo && \
+        ccache \
+        openjdk-11-jre && \
     apt clean && \
     ln -sf /usr/bin/python3 /usr/bin/python
-
-# Install mill
-RUN sh -c "curl -L https://github.com/com-lihaoyi/mill/releases/download/0.9.8/0.9.8 > /usr/local/bin/mill && chmod +x /usr/local/bin/mill" && \
-    mill --version
 
 # Install verilator
 RUN git clone -b v4.218 https://github.com/verilator/verilator.git && \
@@ -122,6 +102,39 @@ RUN git clone -b v4.218 https://github.com/verilator/verilator.git && \
     make install && \
     cd .. && \
     rm -rf ./verilator
+
+# Install mill
+RUN sh -c "curl -L https://github.com/com-lihaoyi/mill/releases/download/0.9.8/0.9.8 > /usr/local/bin/mill && chmod +x /usr/local/bin/mill" && \
+    mill --version
+
+# Install packages for DASICS repositories
+RUN apt install -y ninja-build \
+        libpixman-1-dev \
+        libglib2.0-dev \
+        libncurses5-dev \
+        openssl \
+        libssl-dev \
+        build-essential \
+        pkg-config \
+        libc6-dev \
+        libelf-dev \
+        libtool \
+        bc \
+        device-tree-compiler \
+        libsdl2-dev \
+        time \
+        libreadline6-dev \
+        sqlite3 \
+        libsqlite3-dev \
+        zlib1g-dev && \
+    apt clean
+
+# Install additional auxiliary packages
+RUN apt install -y openssh-server \
+        vim \
+        tmux \
+        inetutils-ping && \
+    apt clean
 
 # Add toolchain to $PATH
 ENV RISCV=/opt/riscv
