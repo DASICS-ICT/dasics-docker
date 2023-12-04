@@ -78,6 +78,7 @@ RUN apt update && \
         git \
         python3 \
         pip \
+        vim \
         openssh-server \
         ninja-build \
         libpixman-1-dev \
@@ -126,6 +127,12 @@ RUN git clone -b v4.218 https://github.com/verilator/verilator.git && \
 # Add toolchain to $PATH
 ENV RISCV=/opt/riscv
 ENV PATH=$RISCV/bin:$PATH
+
+# Clone DASICS-TOP repository
+RUN git clone -b xs-dasics-v1.0-release https://github.com/DASICS-ICT/dasics-top.git && \
+    cd dasics-top && \
+    git reset --hard 3a2eb50ab1cfe464e70853677d7e7ad2e02a3bad && \
+    cd ..
 
 # Set the entrypoint script for creating new user with the same uid as host user
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
