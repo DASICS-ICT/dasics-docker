@@ -37,7 +37,7 @@ DOCKER_RUN_DASICS:= $(if $(HOST_DASICS), -w $(HOST_DASICS) \
 # Makefile Rules
 ######################################################
 
-.PHONY: all image run
+.PHONY: all image run attach
 
 # Default target
 all: image
@@ -59,3 +59,7 @@ run:
 		@echo "Error: Container in bad status, please check manually!" >&2; \
 		@exit 1; \
 	fi;
+
+# Attach to Running Container
+attach:
+	$(DOCKER) attach $(CTR_NAME)
